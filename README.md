@@ -46,7 +46,7 @@ wget -O opencv_contrib.zip https://github.com/opencv/opencv_contrib/archive/4.4.
 ```
 
 # Cmake option
-1. make folder in opencv folder
+- make folder in opencv folder
 ```
 mkdir build
 ```
