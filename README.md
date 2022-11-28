@@ -1,14 +1,13 @@
 # opencv_env_setting
 
 # Install dependency
-- 기존 설치 opencv 제거
-1. 
+
+- 1. 기존 버전이 설치되어있는지를 확인 후 설치가 안 되어있으면 설치를 진행하면 됨
 ```
 pkg-config --modversion opencv
 ```
-으로 기존 버전이 설치되어있는지를 확인 후 설치가 안 되어있으면 설치를 진행하면 됨
  
-2. 제거
+- 2. 제거
 ```
 sudo apt-get purge libopencv* python-opencv
 sudo apt-get autoremove
