@@ -12,7 +12,7 @@ sudo apt-get autoremove
 sudo find /usr/local/ -name "*opencv*" -exec rm -i {} \;
 
 
-1. 준비
+3. 준비
 sudo apt-get update
 sudo apt-get upgrade
  
@@ -35,3 +35,10 @@ sudo apt-get install libqt5-dev
 sudo apt-get install mesa-utils libgl1-mesa-dri libgtkgl2.0-dev libgtkglext1-dev
  
 sudo apt-get install python2.7-dev python3-dev python-numpy python3-numpy
+
+# Download OPENCV
+- wget -O opencv_contrib.zip https://github.com/opencv/opencv_contrib/archive/4.4.0.zip
+- wget -O opencv_contrib.zip https://github.com/opencv/opencv_contrib/archive/4.4.0.zip
+
+# Cmake option
+- mkdir -p build
