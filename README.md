@@ -49,6 +49,7 @@ wget -O opencv_contrib.zip https://github.com/opencv/opencv_contrib/archive/4.4.
 ```
 mkdir -p build
 ```
+```
 cmake -D CMAKE_BUILD_TYPE=RELEASE \
 -D CMAKE_INSTALL_PREFIX=/usr/local \
 -D WITH_TBB=OFF \
@@ -79,6 +80,4 @@ cmake -D CMAKE_BUILD_TYPE=RELEASE \
 -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib-4.4.0/modules \
 -D OPENCV_ENABLE_NONFREE=ON \
 -D BUILD_EXAMPLES=OFF ..
-```
-
 ```
