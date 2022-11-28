@@ -15,7 +15,7 @@ sudo apt-get autoremove
 sudo find /usr/local/ -name "*opencv*" -exec rm -i {} \;
 ```
 
-3. 준비
+- 3. 준비
 
 ```
 sudo apt-get update
