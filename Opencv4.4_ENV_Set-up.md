@@ -88,3 +88,11 @@ cmake -D CMAKE_BUILD_TYPE=RELEASE \
 -D OPENCV_ENABLE_NONFREE=ON \
 -D BUILD_EXAMPLES=OFF ..
 ```
+
+```
+make -j$
+sudo make install
+sudo ldconfig
+```
+
+# Done
