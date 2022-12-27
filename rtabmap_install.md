@@ -6,9 +6,9 @@
 sudo apt-get install ros-melodic-libg2o
 ```
 
-#install gtsam
+# install gtsam
 
-#install octomap
+# install octomap
 ```
 sudo apt-get install ros-melodic-octomap
 ```
