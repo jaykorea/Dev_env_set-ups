@@ -94,5 +94,20 @@ make -j$
 sudo make install
 sudo ldconfig
 ```
+# After install
+```
+sudo make install
+위의 명령어로 인스톨을 하고,
+ 
+아래 명령어로 확인해서 /usr/local/lib이 있으면 된 것입니다.
+cat /etc/ld.so.conf.d/*
+ 
+해당 파일이 없다면,
+sudo sh -c 'echo '/usr/local/lib' > /etc/ld.so.conf.d/opencv.conf'
+을 하고,
+ 
+모두 완료되었으면
+sudo ldconfig
+```
 
 # Done
