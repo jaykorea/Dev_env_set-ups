@@ -5,7 +5,7 @@
 wget https://cmake.org/files/v3.16/cmake-3.16.2.tar.gz
 ```
 
-- unZip
+- Unzip
 ```
 tar -xvzf 해당파일.tar.gz
 cd 압축풀린폴더
@@ -13,7 +13,7 @@ cd 압축풀린폴더
 make
 sudo make install
 ```
-- add path to bashrc/zshrc or bash_profile
+- Add path to bashrc/zshrc or bash_profile
 ```
 PATH=/usr/local/bin:$PATH:$HOME/bin
 ```
