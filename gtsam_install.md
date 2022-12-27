@@ -4,15 +4,21 @@ GTSAM can be installed on Ubuntu via these PPA repositories as well. At present 
 
 Add PPA for GTSAM nightly builds (develop branch)
 # Add PPA
-``sudo add-apt-repository ppa:borglab/gtsam-develop
+```
+sudo add-apt-repository ppa:borglab/gtsam-develop
 sudo apt update  # not necessary since Bionic
 ```
 # Install:
-```sudo apt install libgtsam-dev libgtsam-unstable-dev```
+```
+sudo apt install libgtsam-dev libgtsam-unstable-dev
+```
 Add PPA for the latest GTSAM 4.x stable release
 # Add PPA
-```sudo add-apt-repository ppa:borglab/gtsam-release-4.0
+```
+sudo add-apt-repository ppa:borglab/gtsam-release-4.0
 sudo apt update  # not necessary since Bionic
 ```
 # Install:
+```
 sudo apt install libgtsam-dev libgtsam-unstable-dev
+```
