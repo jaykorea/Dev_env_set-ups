@@ -18,7 +18,14 @@ sudo apt install libgtsam-dev libgtsam-unstable-dev
 ```
 sudo apt-get install ros-melodic-octomap
 ```
-
+- install libpointmatcher
+```
+sudo apt-get install ros-melodic-libpointmatcher
+```
+- install pcl
+```
+sudo apt-get install ros-melodic-pcl-ros
+```
 - install apriltag
 
 ```
@@ -37,4 +44,11 @@ install find_object_2d source to catkin workspace
 ```
 git clone https://github.com/introlab/find-object.git src/find_object_2d
 catkin_make 
+```
+
+# Install Rtabmap
+```
+cmake .. -DWITH_CERES=ON
+make -j8
+sudo make install
 ```
