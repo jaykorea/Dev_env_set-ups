@@ -22,3 +22,8 @@ sudo apt update  # not necessary since Bionic
 ```
 sudo apt install libgtsam-dev libgtsam-unstable-dev
 ```
+# ETC
+- change nvidia GPG key
+```
+sudo add-apt-repository ppa:borglab/gtsam-release-4.0
+```
