@@ -31,3 +31,10 @@ cmake -DCMAKE_BUILD_TYPE=release
 make -j8
 sudo make install
 ```
+
+- install find_object_2d
+install find_object_2d source to catkin workspace
+```
+git clone https://github.com/introlab/find-object.git src/find_object_2d
+catkin_make 
+```
