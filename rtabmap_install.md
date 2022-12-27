@@ -18,3 +18,16 @@ sudo apt install libgtsam-dev libgtsam-unstable-dev
 ```
 sudo apt-get install ros-melodic-octomap
 ```
+
+- install apriltag
+
+```
+git clone https://github.com/AprilRobotics/apriltag.git
+
+mkdir build
+
+cd build
+cmake -DCMAKE_BUILD_TYPE=release
+make -j8
+sudo make install
+```
