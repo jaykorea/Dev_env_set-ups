@@ -15,7 +15,10 @@ sudo apt-get install openvdb-dev
 
 - install costmap converter for opencv4
 ```
-TBD
+1. move costmap converter pkg to navigation_ws pkg folder
+2. build
+3. move teb local planner pkg to navigation_ws pkg folder
+4. build with optimization option
 ```
 - install ecl threads
 ```
