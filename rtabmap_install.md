@@ -38,6 +38,11 @@ cmake -DCMAKE_BUILD_TYPE=release
 make -j8
 sudo make install
 ```
+- install apriltag ros pkg
+```
+git clone https://github.com/AprilRobotics/apriltag_ros.git
+catkin_make
+```
 
 - install find_object_2d
 install find_object_2d source to catkin workspace
