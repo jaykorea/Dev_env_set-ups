@@ -1,5 +1,15 @@
 # Linux Distribution
 
+# install specific apt version
+```
+sudo apt-get install librealsense2-udev-rules=2.51.1-0\~realsense0.7525
+sudo apt-get install librealsense2-utils=2.51.1-0\~realsense0.7525
+sudo apt-get install librealsense2=2.51.1-0\~realsense0.7525
+sudo apt-get install librealsense2-dkms=1.3.18-0ubuntu1
+sudo apt-get install librealsense2-gl=2.51.1-0\~realsense0.7525
+sudo apt-get install librealsense2-net=2.51.1-0\~realsense0.7525
+```
+
 #### Using pre-build packages
 **Intel® RealSense™ SDK 2.0** provides installation packages for Intel X86/AMD64-based Debian distributions in [`dpkg`](https://en.wikipedia.org/wiki/Dpkg) format for Ubuntu 16/18/20/22 [LTS](https://wiki.ubuntu.com/LTS).    
 The Realsense [DKMS](https://en.wikipedia.org/wiki/Dynamic_Kernel_Module_Support) kernel drivers package (`librealsense2-dkms`) supports Ubuntu LTS kernels 4.4, 4.8, 4.10, 4.13, 4.15, 4.18*, 5.0*, 5.3*, 5.4, 5.13 and 5.15. Please refer to [Ubuntu Kernel Release Schedule](https://wiki.ubuntu.com/Kernel/Support) for further details.
@@ -78,13 +88,3 @@ librealsense2-net-dbg | Network module debug symbols | librealsense2
 
 **Note** The packages include binaries and configuration files only.
 Use the github repository to obtain the source code.
-
-# install specific apt version
-```
-sudo apt-get install librealsense2-udev-rules=2.51.1-0\~realsense0.7525
-sudo apt-get install librealsense2-utils=2.51.1-0\~realsense0.7525
-sudo apt-get install librealsense2=2.51.1-0\~realsense0.7525
-sudo apt-get install librealsense2-dkms=1.3.18-0ubuntu1
-sudo apt-get install librealsense2-gl=2.51.1-0\~realsense0.7525
-sudo apt-get install librealsense2-net=2.51.1-0\~realsense0.7525
-```
