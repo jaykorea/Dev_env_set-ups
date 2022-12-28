@@ -78,3 +78,13 @@ librealsense2-net-dbg | Network module debug symbols | librealsense2
 
 **Note** The packages include binaries and configuration files only.
 Use the github repository to obtain the source code.
+
+# install specific apt version
+```
+sudo apt-get install librealsense2-udev-rules=2.51.1-0\~realsense0.7525
+sudo apt-get install librealsense2-utils=2.51.1-0\~realsense0.7525
+sudo apt-get install librealsense2=2.51.1-0\~realsense0.7525
+sudo apt-get install librealsense2-dkms=1.3.18-0ubuntu1
+sudo apt-get install librealsense2-gl=2.51.1-0\~realsense0.7525
+sudo apt-get install librealsense2-net=2.51.1-0\~realsense0.7525
+```
