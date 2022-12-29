@@ -29,6 +29,16 @@ sudo docker images   # 확인하기
 ```
 # docker run command
 ```
-sudo docker run --init --privileged -it --name freeway --net=host --gpus all -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v ~/docker_share:/data -v /dev:/dev --rm jaykor97freeway:rev.04_jay /bin/zsh
-
+sudo docker run --init --privileged -it --name freeway --net=host --gpus all -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v ~/docker_share:/data -v /dev:/dev --rm jaykor97/freeway:rev.04_jay /bin/zsh
+```
+# error to load gpu drivier
+- docker run 명령어를 사용하여 container를 생성할 때 --gpus 옵션을 사용하여 생성하는 경우 아래와 같이 문제가 발생한다.
+- docker: Error response from daemon: could not select device driver "" with capabilities: [[gpu]].
+- 해결 방안
+- nvidia-container-toolkit을 설치하면 모든게 해결된다. 우선 nvidia repository를 추가한 다음 apt-get 명령어를 사용하여 nvidia-container-toolkit을 설치해 준다.
+```
+$ distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \
+   && curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add - \
+   && curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list
+$ sudo apt-get update && sudo apt-get install -y nvidia-container-toolkit
 ```
