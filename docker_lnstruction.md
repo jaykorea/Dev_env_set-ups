@@ -14,3 +14,7 @@ docker image freeway:rev.04_jay jaykor97/freeway:rev.04_jay
 ```
 docker push jaykor97/freeway:rev.04_jay
 ```
+# docker run command
+```
+sudo docker run --init -it 
+```
