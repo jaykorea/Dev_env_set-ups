@@ -16,5 +16,6 @@ docker push jaykor97/freeway:rev.04_jay
 ```
 # docker run command
 ```
-sudo docker run --init -it 
+sudo docker run --init --privileged -it --name freeway --net=host --gpus all -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v ~/docker_share:/data -v /dev:/dev --rm jaykor97freeway:rev.04_jay /bin/zsh
+
 ```
