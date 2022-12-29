@@ -1,22 +1,22 @@
 # Install docker for ubuntu18.04
 
-- 1. 시스템을 최신으로 하기 위한 업데이트를 한다. 
+- 1. system repo update
 ```
 sudo apt update
 ```
-- 2. 사전 설치를 한다. 
+- 2. install dependencies 
 ```
 sudo apt install apt-transport-https ca-certificates curl software-properties-common
 ```
-- 3. Docker repository key를 Add 한다. 
+- 3. add docker repository key 
 ```
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 ````
-- 4. Docker repository를 Add 한다. 
+- 4. add docker repository 
 ```
 sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
 ```
-- 5. 시스템을 최신으로 하기 위한 다시 업데이트를 한다. 
+- 5. system repo update 
 ```
 sudo apt update
 ```
