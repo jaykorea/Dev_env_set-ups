@@ -14,7 +14,7 @@ docker image freeway:rev.04_jay jaykor97/freeway:rev.04_jay
 ```
 docker push jaykor97/freeway:rev.04_jay
 ```
-# docker backup(save_
+# docker backup(save)
 - save docker image to tar
 ```
 sudo docker save -o [저장할이름].tar [이미지 이름]
