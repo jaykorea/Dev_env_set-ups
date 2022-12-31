@@ -31,7 +31,6 @@ sudo docker images   # 확인하기
 ```
 sudo docker run --init --privileged -it --name freeway --net=host --gpus all -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v ~/docker_share:/data -v /dev:/dev --rm jaykor97/freeway:rev.04_jay /bin/zsh
 ```
-
 # docker run command for external gui
 - enable gpu capabilities and link to external dispaly port
 ```
@@ -54,4 +53,14 @@ distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \
 ```
 sudo apt-get update && sudo apt-get install -y nvidia-container-toolkit
 sudo systemctl restart docker
+```
+# gazebo error
+- need to change ~/.ignition/fuel/config.yaml as following.
+```
+url: https://api.ignitionfuel.org
+
+to
+
+url: https://api.ignitionrobotics.org
+
 ```
