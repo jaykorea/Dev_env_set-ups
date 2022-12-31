@@ -54,7 +54,7 @@ distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \
 sudo apt-get update && sudo apt-get install -y nvidia-container-toolkit
 sudo systemctl restart docker
 ```
-# gazebo error
+# gazebo [[Err] [REST.cc:205] Error in REST request] error
 - need to change ~/.ignition/fuel/config.yaml as following.
 ```
 url: https://api.ignitionfuel.org
