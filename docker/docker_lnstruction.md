@@ -31,6 +31,16 @@ sudo docker images   # 확인하기
 ```
 sudo docker run --init --privileged -it --name freeway --net=host --gpus all -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v ~/docker_share:/data -v /dev:/dev --rm jaykor97/freeway:rev.04_jay /bin/zsh
 ```
+
+# docker run command for external gui
+- enable gpu capabilities and link to external dispaly port
+```
+xhost +local:docker
+```
+- run command
+```
+sudo docker run --init --privileged -it --name freeway --net=host --gpus=all -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix:rw -v ~/docker_share:/data -v /dev:/dev -v /tmp/.docker.xauth:/tmp/.docker.xauth:rw -e XAUTHORITY=/tmp/.docker.xauth -e QT_X11_NO_MITSHM=1 -e NVIDIA_DRIVER_CAPABILITIES=all --rm jaykor97/freeway:rev.04_jay /bin/zsh  
+```
 # error to load gpu drivier
 - docker run 명령어를 사용하여 container를 생성할 때 --gpus 옵션을 사용하여 생성하는 경우 아래와 같이 문제가 발생한다.
 - docker: Error response from daemon: could not select device driver "" with capabilities: [[gpu]].
