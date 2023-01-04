@@ -27,4 +27,7 @@ source /usr/share/gazebo-<version>/setup.sh
 ```
 cp ~/.gazebo/models/.git/config ~/.gazebo/models/.git/model.config
 ```
-- and run command 'gazebo --verbose'
+- and run command
+```
+gazebo --verbose
+```
