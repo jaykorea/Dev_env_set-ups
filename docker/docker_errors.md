@@ -1,4 +1,5 @@
 # Gazebo model error ( Can not load gazebo without internet)
+## gazebo keep requesting gazebo models to server even if internet is not connected
 - download menifest gazebo model to .gazebo folder as 'models'
 ```
 cd ~/.gazebo
