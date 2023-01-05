@@ -3,9 +3,9 @@
 # install specific apt version
 ```
 sudo apt-get install librealsense2-udev-rules=2.51.1-0\~realsense0.7525
-sudo apt-get install librealsense2-utils=2.51.1-0\~realsense0.7525
 sudo apt-get install librealsense2=2.51.1-0\~realsense0.7525
 sudo apt-get install librealsense2-dkms=1.3.18-0ubuntu1
+sudo apt-get install librealsense2-utils=2.51.1-0\~realsense0.7525
 sudo apt-get install librealsense2-gl=2.51.1-0\~realsense0.7525
 sudo apt-get install librealsense2-net=2.51.1-0\~realsense0.7525
 ```
