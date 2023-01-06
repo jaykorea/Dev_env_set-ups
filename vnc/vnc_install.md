@@ -10,7 +10,7 @@ sudo apt install tigervnc-standalone-server tigervnc-common
 ```
 vncpasswd
 
-<view only no>
+<Would you like to enter a view-only password (y/n)? n>
 ```
 # once installed create xstartup script
 ```
