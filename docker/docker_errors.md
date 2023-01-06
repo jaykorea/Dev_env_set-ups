@@ -32,3 +32,15 @@ cp ~/.gazebo/models/.git/config ~/.gazebo/models/.git/model.config
 ```
 gazebo --verbose
 ```
+
+# docker roscore error
+- stop all container first
+```
+// docker container 중지
+[root@dpleevbox bin]# docker stop $(docker ps -q)
+af31a57ff9d0
+// docker container 삭제
+[root@dpleevbox bin]# docker rm $(docker ps -a -q)
+af31a57ff9d0
+ca715ff95fab
+```
