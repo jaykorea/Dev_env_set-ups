@@ -77,3 +77,7 @@ sudo systemctl enable vncserver@1.service
 sudo systemctl start vncserver@1
 sudo systemctl status vncserver@1
 ```
+# ref link
+```
+https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-vnc-on-ubuntu-20-04
+```
