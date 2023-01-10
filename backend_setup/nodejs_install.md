@@ -32,7 +32,7 @@ export PATH=$PATH:~/.npm-global-modules/bin
 source ~/.zshrc && source ~/.profile
 ```
 
-#install redis-server
+# install redis-server
 - just install recommended
 ```
 sudo apt-get install redis-server
@@ -45,4 +45,24 @@ sudo systemctl start redis-server
 - check if it is running well
 ```
 sudo systemctl status redis-server
+```
+
+# install pm2 on root folder
+- switch to project root folder
+```
+cd ~/freeway_ui/src/freeway_ui_backend
+```
+- install dependencies
+```
+npm install
+(if not working try -> npm install -g
+```
+- install pm2 and logrotate
+```
+npm install pm2 -g
+pm2 install pm2-logrotate
+```
+- run with id option
+```
+pm2 start app.js --name "freeway_ui" --time
 ```
