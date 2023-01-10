@@ -31,3 +31,18 @@ export PATH=$PATH:~/.npm-global-modules/bin
 
 source ~/.zshrc && source ~/.profile
 ```
+
+#install redis-server
+- just install recommended
+```
+sudo apt-get install redis-server
+```
+- system init
+```
+sudo systemctl enable redis-server
+sudo systemctl start redis-server
+```
+- check if it is running well
+```
+sudo systemctl status redis-server
+```
