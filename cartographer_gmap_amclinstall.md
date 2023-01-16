@@ -30,3 +30,24 @@ sudo apt-get remove ros-${ROS_DISTRO}-abseil-cpp
 ```
 catkin_make_isolated --install --use-ninja
 ```
+
+# install cuda amcl
+- clone
+```
+git clone https://github.com/atinfinity/amcl.git
+```
+- edit cuda gen code in Cmakelists to 75(for rtx2060, xavier agx)
+
+# install gmap
+- clone
+```
+git clone https://github.com/ros-perception/slam_gmapping.git
+```
+- clone dependency
+```
+git clone htttps://github.com/ros-perception/openslam_gmapping.git
+```
+- edit max laser beam param to 4096
+```
+nano openslam_gmapping/include/scanmatcher/scanmatcher.h
+```
