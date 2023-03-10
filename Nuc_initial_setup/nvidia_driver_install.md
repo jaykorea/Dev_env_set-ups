@@ -1,3 +1,13 @@
+# ubuntu nvidia driver crash
+- if ubuntu login screen freezes and the other i/o devices not working just reinstall xorg
+- get to recovery mode on grub
+```
+sudo apt-get purge xorg-*
+sudo apt-get purge xserver-xorg (if it is available)
+
+sudo apt-get install xorg
+sudo apt-get insatll xerver-xorg (if it is available)
+```
 # install nvidia driver on nuc
 - 1. etc/modprobe.d/blacklist.conf 에서 blacklist nouveau 추가
 - 2. update
