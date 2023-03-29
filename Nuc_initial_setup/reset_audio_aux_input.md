@@ -63,3 +63,7 @@ sudo systemctl daemon-reload
 sudo systemctl enable audio_reset.service
 sudo systemctl start audio_reset.service
 ```
+- check service
+```
+sudo systemctl status audio_reset.service
+```
