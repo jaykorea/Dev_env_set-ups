@@ -48,7 +48,7 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/audio_reset.sh
+ExecStart=/bin/bash -c "killall pulseaudio && /usr/bin/pulseaudio --start"
 TimeoutStartSec=0
 
 [Install]
