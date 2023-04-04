@@ -38,7 +38,14 @@ sudo ln -s /etc/nginx/sites-available/rgbanalyzer /etc/nginx/sites-enabled/
 ```
 sudo systemctl restart nginx
 ```
-
+# install gunicorn
+```
+pip install gunicorn
+```
+# launch server with gunicorn on root folder(for mine)
+```
+gunicorn --bind 0.0.0.0:8001 whatimage.wsgi:application
+```
 # request example
 ```
 getImages = () => {
