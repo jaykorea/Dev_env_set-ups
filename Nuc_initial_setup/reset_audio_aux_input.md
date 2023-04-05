@@ -43,16 +43,17 @@ sudo nano /etc/systemd/system/audio_reset.service
 - set scripts
 ```                                                    
 [Unit]
-Description=Audio input reset to detect AUX 3.5 input
-After=network.target
+Description=Restart PulseAudio on boot
+After=multi-user.target
 
 [Service]
+User=fw06
+ExecStart=/bin/bash -c "pulseaudio --kill; sleep 5; pulseaudio --start"
+Restart=on-failure
 Type=simple
-ExecStart=/bin/bash -c "killall pulseaudio && /usr/bin/pulseaudio --start"
-TimeoutStartSec=0
 
 [Install]
-WantedBy=default.target
+WantedBy=multi-user.target
 ```
 - reload daemon
 ```
