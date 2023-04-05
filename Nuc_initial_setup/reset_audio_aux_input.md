@@ -12,27 +12,56 @@ fw05 ALL=(ALL) NOPASSWD: /sbin/poweroff, /sbin/reboot, /sbin/shutdown, /usr/bin/
 # write shell script to kill and run pulseaudio
 - write scripts
 ```
-sudo nano /usr/bin/audio_reset.sh
+sudo nano /usr/local/bin/audio_reset.sh
 ```
 - set shell script
 ```
 #!/bin/bash
 
-echo "Audio Resetting, please wait!"
+timeout_flag=0
 
-# Kill pulseaudio forcefully using killall
-sudo pulseaudio --kill
-# Wait for pulseaudio to be terminated
-while pgrep -x pulseaudio > /dev/null; do sleep 1; done
+# Check if pulseaudio is running
+for i in {1..10}
+do
+    if pgrep pulseaudio > /dev/null; then
+        echo "pulseaudio is running"
+        timeout_flag=0
+        break
+    fi
+    sleep 1
+    if [[ $i -eq 10 ]]; then
+        echo "pulseaudio is not running"
+        timeout_flag=1
+        break
+    fi
+done
 
-# Start pulseaudio using the non-root user specified in the script
-sudo pulseaudio --start
+# Kill pulseaudio if it is running
+if [ $timeout_flag -eq 0 ]; then
+    pulseaudio --kill
+    # Wait for pulseaudio to stop
+    for i in {1..10}
+    do
+        if ! pgrep pulseaudio > /dev/null; then
+            echo "pulseaudio stopped"
+            break
+        fi
+        sleep 1
+        if [[ $i -eq 10 ]]; then
+            echo "pulseaudio could not be stopped, force-killing process"
+            killall -9 pulseaudio
+            break
+        fi
+    done
+fi
 
-exit
+# Start pulseaudio
+echo "Starting pulseaudio"
+pulseaudio --start
 ```
 - add exec auth
 ```
-sudo chmod +x /usr/bin/audio_reset.sh
+sudo chmod +x /usr/local/bin/audio_reset.sh
 ```
 
 # write systemd service script to run shell script
@@ -40,20 +69,21 @@ sudo chmod +x /usr/bin/audio_reset.sh
 ```
 sudo nano /etc/systemd/system/audio_reset.service
 ```
-- set scripts
-```                                                    
+- set scripts ( the User section differs from machine name)
+```
 [Unit]
 Description=Restart PulseAudio on boot
 After=multi-user.target
 
 [Service]
 User=fw06
-ExecStart=/bin/bash -c "pulseaudio --kill; sleep 5; pulseaudio --start"
+ExecStart=/usr/local/bin/audio_reset.sh
 Restart=on-failure
 Type=simple
 
 [Install]
 WantedBy=multi-user.target
+
 ```
 - reload daemon
 ```
