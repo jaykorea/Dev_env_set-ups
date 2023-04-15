@@ -217,10 +217,225 @@ class Classifier extends Component {
                 <aside>
                   {files}
                 </aside>
-              </React.Fragment>
-            </React.Fragment>
-          );
-          
+                import React, { Component } from 'react';
+import Dropzone from 'react-dropzone';
+import './Classifier.css';
+import { Alert, Button, Image, Spinner, Form, FormControl, ProgressBar } from 'react-bootstrap';
+import axios from 'axios'
+import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
+import { getReqUrlAddress } from '../GetUrl/GetUrl.js';
+
+class Classifier extends Component {
+    state = {
+        files: [],
+        isLoading: false,
+        isAnalyzing: false,
+        recentImage: null,
+        e_hr: '', // add state variable for e_hr
+        e_min: '', // add state variable for e_min
+        showMessage: false,
+        isMultipleimages: false,
+        showProcessedImage: false,
+        analyzedInfo: null,
+    }
+
+    // event handler for e_hr input field
+    handleEhrChange = (event) => {
+        this.setState({ e_hr: event.target.value });
+    }
+
+    // event handler for e_min input field
+    handleEminChange = (event) => {
+        this.setState({ e_min: event.target.value });
+    }
+
+    onDrop = (files) => {
+      if (files.length > 1) {
+        this.setState({ isMultipleimages: true });
+        return;
+      }
+      this.setState({
+        isLoading: true,
+        files: [],
+        recentImage: null,
+        isMultipleimages: false, // Reset the state when a single image is uploaded
+      });
+    
+      const file = files[0];
+      const reader = new FileReader();
+    
+      reader.onload = () => {
+        this.setState({
+          recentImage: {
+            file: file,
+            preview: reader.result,
+          },
+          isLoading: false,
+        });
+      };
+      reader.readAsDataURL(file);
+    };
+    
+
+    loadingImage = (files) => {
+        setTimeout(() => {
+            this.setState({
+                files,
+                isLoading: false,
+                showProcessedImage: false
+            }, () => {
+                console.log(this.state.files[0].name)
+            })
+        }, 1000);
+    }
+    analyzingImage = () => {
+        setTimeout(() => {
+            this.setState({
+                isAnalyzing: false
+            }, () => {
+                console.log(this.state.files[0].name)
+            })
+        }, 1000);
+    }
+    activateSpinner = () => {
+        this.setState({
+            isLoading: true,
+            isAnalyzing: true,
+            files: []
+        })
+    }
+
+    deactivateSpinner = () => {
+        this.setState({
+            isLoading: false,
+            isAnalyzing: false,
+        })
+    }
+
+    handleDisabledClick = () => {
+        this.setState({ showMessage: true });
+        // setTimeout(() => {
+        //     this.setState({ showMessage: false });
+        // }, 1000); // Show the message for 3 seconds
+    }
+
+    sendImage = () => {
+      this.setState({
+        isLoading: false,
+        isAnalyzing: true,
+        files: []
+      });
+      let formData = new FormData();
+      formData.append('image', this.state.files[0], this.state.files[0].name);
+      formData.append('e_hr', this.state.e_hr); // add e_hr data to FormData
+      formData.append('e_min', this.state.e_min); // add e_min data to FormData
+      getReqUrlAddress().then(ipAddress => {
+        axios.post(`${ipAddress}/api/images/`, formData, {
+          headers: {
+            'accept': 'application/json',
+            'content-type': 'multipart/form-data',
+          },
+        })
+          .then(resp => {
+            this.getImageResults(resp);
+            console.log(resp.data);
+          })
+          .catch(err => {
+            console.log('Error Message here: ' + err);
+          });
+      });
+    }
+    
+    getImageResults = (object) => {
+      getReqUrlAddress().then(ipAddress => {
+        axios.get(`${ipAddress}/api/images/${object.data.id}/`, {
+          headers: {
+            'accept': 'application/json',
+          },
+        })
+          .then(resp => {
+            this.setState({ recentImage: resp, analyzedInfo: resp.data.analyzed_info });
+            console.log(resp);
+          })
+          .catch(err => {
+            console.log('Error Message here: ' + err);
+          });
+        this.deactivateSpinner();
+      });
+    }
+    
+    showProcessedImage = async () => {
+      const ipAddress = await getReqUrlAddress();
+      axios.get(`${ipAddress}${this.state.recentImage.data.processed_image}`, {
+        headers: {
+          'accept': 'image/png, image/jpeg',
+        },
+        responseType: 'blob',
+      })
+        .then(resp => {
+          this.getImageResults(resp);
+          console.log(resp.data);
+          this.setState({ showProcessedImage: false }); // Add this line to hide the processed image initially
+        })
+        .catch(err => {
+          console.log('Error Message here: ' + err);
+        });
+      this.setState({ showProcessedImage: true });
+    }
+    
+
+    hideProcessedImage = () => {
+        this.setState({ showProcessedImage: false });
+    }
+
+
+
+    // render() {
+    //     // console.log('e_hr :' + this.state.e_hr)
+    //     // console.log('e_min :' + this.state.e_min)
+    //     const files = this.state.files.map(file => (
+    //       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    //         <li key={file.name} style={{ margin: 'auto' }}>
+    //           {file.name} - {file.size} bytes
+    //         </li>
+    //       </div>
+    //     ));
+        render() {
+          const { files } = this.state;
+
+          return (
+            <React.Fragment>
+              {this.state.isLoading && <Spinner animation="border" role="status">
+                <span className="sr-only">Loading...</span>
+              </Spinner>}
+              <React.Fragment>
+                {this.state.recentImage &&
+                  <React.Fragment>
+                    {this.state.recentImage.data && this.state.recentImage.data.analyzed && this.state.recentImage.data.analyzed.includes('Failed') && 
+                      <Alert variant='warning' style={{ marginTop: '12px'}}>
+                        <div className="auto-line-break analyzed-results">{this.state.recentImage.data.analyzed}</div>
+                      </Alert>
+                    }
+                    <div className="image-preview" style={{display: 'flex', flexDirection: 'column', justifyContent: 'center',alignItems: 'center'}}>
+                      <img src={this.state.recentImage.preview} alt="" style={{width: '100%', height: '100%', objectFit: 'contain'}} />
+                    </div>
+                  </React.Fragment>
+                }
+                {!this.state.recentImage &&
+                  <Dropzone onDrop={this.onDrop} accept='image/png, image/jpeg'>
+                    {({ isDragActive, getRootProps, getInputProps }) => (
+                      <div {...getRootProps({ className: 'dropzone back' })} style={{display: 'flex', flexDirection: 'column', justifyContent: 'center',alignItems: 'center'}}>
+                        <input {...getInputProps()} />
+                        <i className="far fa-images mb-2 text-muted" style={{ fontSize: 100 }}></i>
+                        <p className='text-muted'>{isDragActive ? "Drop some images" : "Drag 'n' drop some files here, or click to select files"}</p>
+                      </div>
+                    )}
+                  </Dropzone>
+                }
+                <aside>
+                  {files}
+                </aside>
                 <Form>
                   {this.state.recentImage ? null : (
                     <React.Fragment>
@@ -364,6 +579,37 @@ class Classifier extends Component {
                       </React.Fragment>
                     }
         
+              </React.Fragment>
+            </React.Fragment>
+          );
+          
+                
+      }
+}
+
+export default Classifier;
+
+
+// This error is caused by running out of the inotify watches limit. You can fix it by increasing the inotify limit.
+
+// You can try running the following command to temporarily increase the limit:
+
+// Copy code
+// sudo sysctl fs.inotify.max_user_watches=524288
+// If this works, you can make the change permanent by adding the following line to the end of the /etc/sysctl.conf file:
+
+// Copy code
+// fs.inotify.max_user_watches=524288
+// Then, save the file and run the following command to apply the changes:
+
+
+// sudo sysctl -p
+// After this, you should be able to run npm start without encountering the ENOSPC error.
+              </React.Fragment>
+            </React.Fragment>
+          );
+          
+                
       }
 }
 
