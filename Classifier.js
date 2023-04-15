@@ -41,7 +41,7 @@ class Classifier extends Component {
         files: [],
         recentImage: null,
         isMultipleimages: false, // Reset the state when a single image is uploaded
-      })
+      });
     
       const file = files[0];
       const reader = new FileReader();
@@ -173,69 +173,44 @@ class Classifier extends Component {
 
 
     render() {
-        // console.log('e_hr :' + this.state.e_hr)
-        // console.log('e_min :' + this.state.e_min)
-        const files = this.state.files.map(file => (
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <li key={file.name} style={{ margin: 'auto' }}>
-              {file.name} - {file.size} bytes
-            </li>
-          </div>
-        ));
-
-        return (
-          
-<Dropzone onDrop={this.onDrop} accept='image/png, image/jpeg'>
-  {({ isDragActive, getRootProps, getInputProps }) => (
-    <section className="container">
-  {this.state.recentImage ? (
-    <div className="image-container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '20px' }}>
-      <React.Fragment>
-        {this.state.showProcessedImage ? (
-          <React.Fragment>                      
-            <Button style={{ marginTop: '0px', marginBottom: '30px', fontSize: '15px', width: '220px', height: '40px' }} variant="primary" size="lg" className="mt-3 mx-auto" onClick={this.hideProcessedImage}>Hide Processed Image</Button>
-            <div style={{border: '2px solid #ccc', borderRadius: '4px',padding: '3px',marginTop: '0px', marginBottom: '30px'}}>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}><b style={{ color: 'gray' ,fontStyle: 'italic'}}>Processed Data</b>
-                <Image
-                  className='justify-content-center'
-                  src={this.state.recentImage.data.processed_image}
-                  height='300'
-                  alt="File not Loaded"
-                  rounded
-                  align="center"
-                  style={{ marginTop: '0px', marginBottom: '7px' }}
-                />
-                <div className="analyzed-info-container">
-                    {this.state.analyzedInfo && (
-                      <div className="analyzed-info auto-line-break" style={{ marginBottom: '0px !important' }}>
-                        <b style={{ color: 'gray' ,fontStyle: 'italic'}}><p>{this.state.analyzedInfo}</p></b>
-                      </div>
-                    )}
-                </div>
+      const { files } = this.state;
+    
+      return (
+        <React.Fragment>
+          {this.state.recentImage &&
+            <React.Fragment>
+              {this.state.recentImage.data && this.state.recentImage.data.analyzed && this.state.recentImage.data.analyzed.includes('Failed') && 
+                <Alert variant='warning' style={{ marginTop: '12px'}}>
+                  <div className="auto-line-break analyzed-results">{this.state.recentImage.data.analyzed}</div>
+                </Alert>
+              }
+              <div className="image-preview" style={{display: 'flex', flexDirection: 'column', justifyContent: 'center',alignItems: 'center'}}>
+                <img src={this.state.recentImage.preview} alt="" style={{width: '100%', height: '100%', objectFit: 'contain'}} />
               </div>
-            </div>
-          </React.Fragment>
-        ) : (
-          <div className="image-preview" style={{display: 'flex', flexDirection: 'column', justifyContent: 'center',alignItems: 'center'}}>
-            <img src={this.state.recentImage.preview} alt="" style={{width: '100%', height: '100%', objectFit: 'contain'}} />
-          </div>
-        )}
-      </React.Fragment>
-    </div>
-  ) : (
-    <Dropzone onDrop={this.onDrop} accept='image/png, image/jpeg'>
-      {({ isDragActive, getRootProps, getInputProps }) => (
-        <div {...getRootProps({ className: 'dropzone back' })} style={{display: 'flex', flexDirection: 'column', justifyContent: 'center',alignItems: 'center'}}>
-          <input {...getInputProps()} />
-          <i className="far fa-images mb-2 text-muted" style={{ fontSize: 100 }}></i>
-          <p className='text-muted'>{isDragActive ? "Drop some images" : "Drag 'n' drop some files here, or click to select files"}</p>
-        </div>
-      )}
-    </Dropzone>
-  )}
-  <aside>
-    {files}
-  </aside>
+            </React.Fragment>
+          }
+          {!this.state.recentImage &&
+            <Dropzone onDrop={this.onDrop} accept='image/png, image/jpeg'>
+              {({ isDragActive, getRootProps, getInputProps }) => (
+                <div {...getRootProps({ className: 'dropzone back' })} style={{display: 'flex', flexDirection: 'column', justifyContent: 'center',alignItems: 'center'}}>
+                  <input {...getInputProps()} />
+                  <i className="far fa-images mb-2 text-muted" style={{ fontSize: 100 }}></i>
+                  <p className='text-muted'>{isDragActive ? "Drop some images" : "Drag 'n' drop some files here, or click to select files"}</p>
+                </div>
+              )}
+            </Dropzone>
+          }
+          <aside>
+            {files}
+          </aside>
+        </React.Fragment>
+      );
+    }
+    
+    
+    
+    
+    
                 <Form>
                   {this.state.recentImage ? null : (
                     <React.Fragment>
