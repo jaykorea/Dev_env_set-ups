@@ -172,45 +172,55 @@ class Classifier extends Component {
 
 
 
-    render() {
-      const { files } = this.state;
-    
-      return (
-        <React.Fragment>
-          {this.state.recentImage &&
+    // render() {
+    //     // console.log('e_hr :' + this.state.e_hr)
+    //     // console.log('e_min :' + this.state.e_min)
+    //     const files = this.state.files.map(file => (
+    //       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    //         <li key={file.name} style={{ margin: 'auto' }}>
+    //           {file.name} - {file.size} bytes
+    //         </li>
+    //       </div>
+    //     ));
+        render() {
+          const { files } = this.state;
+
+          return (
             <React.Fragment>
-              {this.state.recentImage.data && this.state.recentImage.data.analyzed && this.state.recentImage.data.analyzed.includes('Failed') && 
-                <Alert variant='warning' style={{ marginTop: '12px'}}>
-                  <div className="auto-line-break analyzed-results">{this.state.recentImage.data.analyzed}</div>
-                </Alert>
-              }
-              <div className="image-preview" style={{display: 'flex', flexDirection: 'column', justifyContent: 'center',alignItems: 'center'}}>
-                <img src={this.state.recentImage.preview} alt="" style={{width: '100%', height: '100%', objectFit: 'contain'}} />
-              </div>
+              {this.state.isLoading && <Spinner animation="border" role="status">
+                <span className="sr-only">Loading...</span>
+              </Spinner>}
+              <React.Fragment>
+                {this.state.recentImage &&
+                  <React.Fragment>
+                    {this.state.recentImage.data && this.state.recentImage.data.analyzed && this.state.recentImage.data.analyzed.includes('Failed') && 
+                      <Alert variant='warning' style={{ marginTop: '12px'}}>
+                        <div className="auto-line-break analyzed-results">{this.state.recentImage.data.analyzed}</div>
+                      </Alert>
+                    }
+                    <div className="image-preview" style={{display: 'flex', flexDirection: 'column', justifyContent: 'center',alignItems: 'center'}}>
+                      <img src={this.state.recentImage.preview} alt="" style={{width: '100%', height: '100%', objectFit: 'contain'}} />
+                    </div>
+                  </React.Fragment>
+                }
+                {!this.state.recentImage &&
+                  <Dropzone onDrop={this.onDrop} accept='image/png, image/jpeg'>
+                    {({ isDragActive, getRootProps, getInputProps }) => (
+                      <div {...getRootProps({ className: 'dropzone back' })} style={{display: 'flex', flexDirection: 'column', justifyContent: 'center',alignItems: 'center'}}>
+                        <input {...getInputProps()} />
+                        <i className="far fa-images mb-2 text-muted" style={{ fontSize: 100 }}></i>
+                        <p className='text-muted'>{isDragActive ? "Drop some images" : "Drag 'n' drop some files here, or click to select files"}</p>
+                      </div>
+                    )}
+                  </Dropzone>
+                }
+                <aside>
+                  {files}
+                </aside>
+              </React.Fragment>
             </React.Fragment>
-          }
-          {!this.state.recentImage &&
-            <Dropzone onDrop={this.onDrop} accept='image/png, image/jpeg'>
-              {({ isDragActive, getRootProps, getInputProps }) => (
-                <div {...getRootProps({ className: 'dropzone back' })} style={{display: 'flex', flexDirection: 'column', justifyContent: 'center',alignItems: 'center'}}>
-                  <input {...getInputProps()} />
-                  <i className="far fa-images mb-2 text-muted" style={{ fontSize: 100 }}></i>
-                  <p className='text-muted'>{isDragActive ? "Drop some images" : "Drag 'n' drop some files here, or click to select files"}</p>
-                </div>
-              )}
-            </Dropzone>
-          }
-          <aside>
-            {files}
-          </aside>
-        </React.Fragment>
-      );
-    }
-    
-    
-    
-    
-    
+          );
+          
                 <Form>
                   {this.state.recentImage ? null : (
                     <React.Fragment>
@@ -353,10 +363,7 @@ class Classifier extends Component {
                     </div>
                       </React.Fragment>
                     }
-              </section>
-            )}
-          </Dropzone>
-        );
+        
       }
 }
 
