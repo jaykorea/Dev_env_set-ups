@@ -217,9 +217,7 @@ class Classifier extends Component {
                 <aside>
                   {files}
                 </aside>
-              </React.Fragment>
-            </React.Fragment>
-          );
+
           
                 <Form>
                   {this.state.recentImage ? null : (
@@ -361,9 +359,11 @@ class Classifier extends Component {
                         </React.Fragment>
                       )}
                     </div>
-                      </React.Fragment>
+                      </React.Fragment> 
                     }
-        
+            </React.Fragment>
+            </React.Fragment>
+          );
       }
 }
 
