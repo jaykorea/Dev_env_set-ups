@@ -13,6 +13,7 @@ class Classifier extends Component {
         isLoading: false,
         isAnalyzing: false,
         recentImage: null,
+        previewImage: null,
         e_hr: '', // add state variable for e_hr
         e_min: '', // add state variable for e_min
         showMessage: false,
@@ -40,6 +41,7 @@ class Classifier extends Component {
             isLoading: true,
             files: [],
             recentImage: null,
+            previewImage: files[0],
             isMultipleimages: false, // Reset the state when a single image is uploaded
         })
         this.loadingImage(files)
@@ -156,31 +158,34 @@ class Classifier extends Component {
         this.setState({ showProcessedImage: false });
     }
 
-
-
     render() {
-        // console.log('e_hr :' + this.state.e_hr)
-        // console.log('e_min :' + this.state.e_min)
-        const files = this.state.files.map(file => (
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <li key={file.name} style={{ margin: 'auto' }}>
-              {file.name} - {file.size} bytes
-            </li>
-          </div>
-        ));
-
-        return (
-            <Dropzone onDrop={this.onDrop} accept='image/png, image/jpeg'>
-            {({ isDragActive, getRootProps, getInputProps }) => (
-              <section className="container">
-                <div {...getRootProps({ className: 'dropzone back' })} style={{display: 'flex', flexDirection: 'column', justifyContent: 'center',alignItems: 'center'}}>
-                  <input {...getInputProps()} />
-                  <i className="far fa-images mb-2 text-muted" style={{ fontSize: 100 }}></i>
-                  <p className='text-muted'>{isDragActive ? "Drop some images" : "Drag 'n' drop some files here, or click to select files"}</p>
+      const { recentImage } = this.state;
+      const files = recentImage && (
+        <div>
+          <strong>{recentImage.file.name}</strong>
+        </div>
+      )
+    
+      return (
+        
+        <React.Fragment>
+                <div className="image-preview" style={{display: 'flex', flexDirection: 'column', justifyContent: 'center',alignItems: 'center'}}>
+                  {this.state.previewImage ? (
+                    <img src={URL.createObjectURL(this.state.previewImage)} alt="" style={{width: '100%', height: '100%', objectFit: 'contain'}} />
+                  ) : (
+                    <Dropzone onDrop={this.onDrop} accept='image/png, image/jpeg'>
+                      {({ isDragActive, getRootProps, getInputProps }) => (
+                        <div {...getRootProps({ className: 'dropzone back' })} style={{display: 'flex', flexDirection: 'column', justifyContent: 'center',alignItems: 'center'}}>
+                          <input {...getInputProps()} />
+                          <i className="far fa-images mb-2 text-muted" style={{ fontSize: 100 }}></i>
+                          <p className='text-muted'>{isDragActive ? "Drop some images" : "Drag 'n' drop some files here, or click to select files"}</p>
+                        </div>
+                      )}
+                    </Dropzone>
+                  )}
                 </div>
-                <aside>
-                  {files}
-                </aside>
+                
+          
                 <Form>
                   {this.state.recentImage ? null : ( // Add this line to conditionally render the Form component
                     <React.Fragment>
@@ -321,9 +326,7 @@ class Classifier extends Component {
                     </div>
                       </React.Fragment>
                     }
-              </section>
-            )}
-          </Dropzone>
+          </React.Fragment>
         );
       }
 }
