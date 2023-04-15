@@ -5,7 +5,7 @@ import { Alert, Button, Image, Spinner, Form, FormControl, ProgressBar } from 'r
 import axios from 'axios'
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-import { getReqUrlAddress } from '../GetUrl/GetUrl.js';
+import { getReqUrlAddress } from '../GetUrl/GetUrl';
 
 class Classifier extends Component {
     state = {
@@ -32,32 +32,18 @@ class Classifier extends Component {
     }
 
     onDrop = (files) => {
-      if (files.length > 1) {
-        this.setState({ isMultipleimages: true });
-        return;
-      }
-      this.setState({
-        isLoading: true,
-        files: [],
-        recentImage: null,
-        isMultipleimages: false, // Reset the state when a single image is uploaded
-      });
-    
-      const file = files[0];
-      const reader = new FileReader();
-    
-      reader.onload = () => {
+        if (files.length > 1) {
+            this.setState({ isMultipleimages: true });
+            return;
+        }
         this.setState({
-          recentImage: {
-            file: file,
-            preview: reader.result,
-          },
-          isLoading: false,
-        });
-      };
-      reader.readAsDataURL(file);
-    };
-    
+            isLoading: true,
+            files: [],
+            recentImage: null,
+            isMultipleimages: false, // Reset the state when a single image is uploaded
+        })
+        this.loadingImage(files)
+    }
 
     loadingImage = (files) => {
         setTimeout(() => {
@@ -172,91 +158,65 @@ class Classifier extends Component {
 
 
 
-    // render() {
-    //     // console.log('e_hr :' + this.state.e_hr)
-    //     // console.log('e_min :' + this.state.e_min)
-    //     const files = this.state.files.map(file => (
-    //       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-    //         <li key={file.name} style={{ margin: 'auto' }}>
-    //           {file.name} - {file.size} bytes
-    //         </li>
-    //       </div>
-    //     ));
-        render() {
-          const { files } = this.state;
+    render() {
+        // console.log('e_hr :' + this.state.e_hr)
+        // console.log('e_min :' + this.state.e_min)
+        const files = this.state.files.map(file => (
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <li key={file.name} style={{ margin: 'auto' }}>
+              {file.name} - {file.size} bytes
+            </li>
+          </div>
+        ));
 
-          return (
-            <React.Fragment>
-              {this.state.isLoading && <Spinner animation="border" role="status">
-                <span className="sr-only">Loading...</span>
-              </Spinner>}
-              <React.Fragment>
-                {this.state.recentImage &&
-                  <React.Fragment>
-                    {this.state.recentImage.data && this.state.recentImage.data.analyzed && this.state.recentImage.data.analyzed.includes('Failed') && 
-                      <Alert variant='warning' style={{ marginTop: '12px'}}>
-                        <div className="auto-line-break analyzed-results">{this.state.recentImage.data.analyzed}</div>
-                      </Alert>
-                    }
-                    <div className="image-preview" style={{display: 'flex', flexDirection: 'column', justifyContent: 'center',alignItems: 'center'}}>
-                      <img src={this.state.recentImage.preview} alt="" style={{width: '100%', height: '100%', objectFit: 'contain'}} />
-                    </div>
-                  </React.Fragment>
-                }
-                {!this.state.recentImage &&
-                  <Dropzone onDrop={this.onDrop} accept='image/png, image/jpeg'>
-                    {({ isDragActive, getRootProps, getInputProps }) => (
-                      <div {...getRootProps({ className: 'dropzone back' })} style={{display: 'flex', flexDirection: 'column', justifyContent: 'center',alignItems: 'center'}}>
-                        <input {...getInputProps()} />
-                        <i className="far fa-images mb-2 text-muted" style={{ fontSize: 100 }}></i>
-                        <p className='text-muted'>{isDragActive ? "Drop some images" : "Drag 'n' drop some files here, or click to select files"}</p>
-                      </div>
-                    )}
-                  </Dropzone>
-                }
+        return (
+            <Dropzone onDrop={this.onDrop} accept='image/png, image/jpeg'>
+            {({ isDragActive, getRootProps, getInputProps }) => (
+              <section className="container">
+                <div {...getRootProps({ className: 'dropzone back' })} style={{display: 'flex', flexDirection: 'column', justifyContent: 'center',alignItems: 'center'}}>
+                  <input {...getInputProps()} />
+                  <i className="far fa-images mb-2 text-muted" style={{ fontSize: 100 }}></i>
+                  <p className='text-muted'>{isDragActive ? "Drop some images" : "Drag 'n' drop some files here, or click to select files"}</p>
+                </div>
                 <aside>
                   {files}
                 </aside>
-
-          
                 <Form>
-                  {this.state.recentImage ? null : (
+                  {this.state.recentImage ? null : ( // Add this line to conditionally render the Form component
                     <React.Fragment>
                       <div className="row" style={{marginTop: '5px'}}>
-                        <div className="col-sm-4 d-flex align-items-center">
-                          <label htmlFor="exposure_hour" className="col-form-label">
-                            Exposure Time
-                          </label>
-                        </div>
-                        <div className="col-sm-2 d-flex align-items-center">
+                        <label for="exposure_hour" className="col-sm-2 col-form-label">
+                          Exposure Hour
+                        </label>
+                        <div className="col-sm-10">
                           <input
                             type="number"
                             className="form-control"
-                            placeholder=""
+                            placeholder="Enter the expected exposure time"
                             id="exposure_hour"
                             name="e_hr"
                             value={this.state.e_hr}
                             onChange={this.handleEhrChange}
                             min="0"
-                          />
+                          ></input>
                         </div>
-                        <div className="col-sm-1 d-flex align-items-center">
-                          <span>h</span>
-                        </div>
-                        <div className="col-sm-2 d-flex align-items-center">
+                      </div>
+
+                      <div className="row">
+                        <label for="exposure_min" className="col-sm-2 col-form-label">
+                          Exposure Minute
+                        </label>
+                        <div className="col-sm-10">
                           <input
                             type="number"
                             className="form-control"
-                            placeholder=""
+                            placeholder="Enter the expected exposure time"
                             id="exposure_min"
                             name="e_min"
                             value={this.state.e_min}
                             onChange={this.handleEminChange}
                             min="0"
-                          />
-                        </div>
-                        <div className="col-sm-1 d-flex align-items-center">
-                          <span>min</span>
+                          ></input>
                         </div>
                       </div>
                     </React.Fragment>
@@ -359,11 +319,12 @@ class Classifier extends Component {
                         </React.Fragment>
                       )}
                     </div>
-                      </React.Fragment> 
+                      </React.Fragment>
                     }
-            </React.Fragment>
-            </React.Fragment>
-          );
+              </section>
+            )}
+          </Dropzone>
+        );
       }
 }
 
