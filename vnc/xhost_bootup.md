@@ -1,5 +1,5 @@
-# edit ~/.profile
+# add startup application
 ```
-xhost +
+command: bash -c 'xhost +local:root'
 ```
-done
+# done
