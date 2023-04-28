@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import Dropzone from 'react-dropzone';
 import './Classifier.css';
-import { Alert, Button, Image, Spinner, Form, FormControl, ProgressBar } from 'react-bootstrap';
+import { Alert, Button, Image, Spinner, Form, FormControl, ProgressBar, Tooltip } from 'react-bootstrap';
+import GaugeChart from 'react-gauge-chart';
 import axios from 'axios'
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
@@ -21,6 +22,7 @@ class Classifier extends Component {
         showMessage: false,
         isMultipleimages: false,
         showProcessedImage: false,
+        showAQI: false,
         analyzedInfo: null,
         dropzoneDimensions: {
           width: 0,
@@ -178,7 +180,14 @@ class Classifier extends Component {
         });
       this.setState({ showProcessedImage: true });
     }
-    
+
+    showAQI = () => {
+      this.setState({ showAQI: true });
+  }
+   
+    hideAQI = () => {
+      this.setState({ showAQI: false });
+  }
 
     hideProcessedImage = () => {
         this.setState({ showProcessedImage: false });
@@ -190,21 +199,21 @@ class Classifier extends Component {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        width: '100%',
-        minHeight: '250px',
-        border: '2px dashed #ccc',
+        minHeight: '330px',
+        marginBottom: '15px',
       };
       let imageStyle = {
         maxWidth: `${dropzoneDimensions.width * 0.99}px`,
         maxHeight: `${dropzoneDimensions.height * 0.9}px`,
         objectFit: 'contain',
+        border: '1px dashed #ccc',
       };
       let dropzoneStyle = {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         width: `${dropzoneDimensions.width}px`,
-        height: `${dropzoneDimensions}px`,
+        maxHeight: '330px', // set a max-height here
       };
     
       const files = this.state.files.map((file) => (
@@ -226,65 +235,64 @@ class Classifier extends Component {
               <Dropzone onDrop={this.onDrop} accept="image/png, image/jpeg">
                 {({ isDragActive, getRootProps, getInputProps }) => (
                   <div {...getRootProps({ className: 'dropzone back' })} style={{ ...dropzoneStyle, display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center' }}>
-  <input {...getInputProps()} />
-  <i className="fa fa-cloud-upload fa-4x text-muted" style={{ fontSize: 120 }}></i>
-  <p className="text-muted">{isDragActive ? 'Drop some images' : "Drag 'n' drop some files here, or click to select files"}</p>
-</div>
+                    <input {...getInputProps()} />
+                    <i className="fa fa-cloud-upload fa-4x text-muted" style={{ fontSize: 120 }}></i>
+                    <p className="text-muted">{isDragActive ? 'Drop some images' : "Drag 'n' drop some files here, or click to select files"}</p>
+                  </div>
                 )}
               </Dropzone>
             )}
           </div>
         </div>
       )}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <label htmlFor="exposure_time" className="col-form-label">
-                  Exposure Time
-                </label> 
-                <br />
-                <Form>
-  {this.state.recentImage ? null : (
-    <React.Fragment>
-      <div className="row justify-content-center" style={{ marginTop: '5px' }}>
-        <div className="col-md-3 col-6">
-          <input
-            type="number"
-            className="form-control"
-            placeholder=""
-            id="exposure_hour"
-            name="e_hr"
-            value={this.state.e_hr}
-            onChange={this.handleEhrChange}
-            min="0"
-          />
-        </div>
-        <label htmlFor="exposure_hour" className="col-md-1 col-2 col-form-label">
-          h
-        </label>
-        <div className="col-md-3 col-6">
-          <input
-            type="number"
-            className="form-control"
-            placeholder=""
-            id="exposure_min"
-            name="e_min"
-            value={this.state.e_min}
-            onChange={this.handleEminChange}
-            min="0"
-          />
-        </div>
-        <label htmlFor="exposure_min" className="col-md-1 col-2 col-form-label">
-          m
-        </label>
-      </div>
-    </React.Fragment>
-  )}
-</Form>
+              <Form>
+                {this.state.recentImage ? null : (
+                  <React.Fragment>
+                <div className="row justify-content-center" style={{ marginTop: '5px' }}>
+                  <label htmlFor="exposure_time" className="col-form-label">
+                    Exposure Time:
+                  </label>
+                <div className="col-sm-2 col-md-4">
+                  <input
+                    type="number"
+                    className="form-control"
+                    placeholder=""
+                    id="exposure_hour"
+                    name="e_hr"
+                    value={this.state.e_hr}
+                    onChange={this.handleEhrChange}
+                    min="0"
+                    style={{ width: '100%' }}
+                  />
+                </div>
+                <label htmlFor="exposure_hour" className="col-form-label">
+                  hr
+                </label>
+                <div className="col-sm-2 col-md-4">
+                  <input
+                    type="number"
+                    className="form-control"
+                    placeholder=""
+                    id="exposure_min"
+                    name="e_min"
+                    value={this.state.e_min}
+                    onChange={this.handleEminChange}
+                    min="0"
+                    style={{ width: '100%' }}
+                  />
+                </div>
+                <label htmlFor="exposure_min" className="col-form-label" >
+                  min
+                </label>
               </div>
+                  </React.Fragment>
+                )}
+              </Form>
                 {this.state.files.length > 0 && (
                   (this.state.e_hr !== "" && this.state.e_min !== "")  && (parseInt(this.state.e_hr) >= 0 && parseInt(this.state.e_min) >= 0) && (parseInt(this.state.e_hr) !== 0 || parseInt(this.state.e_min) !== 0) ? (
-                    <Button variant="info" size="lg" className="mt-3" onClick={this.sendImage}>Analyze</Button>
+                    <Button variant="info" size="lg" className="analyze-button" onClick={this.sendImage}>Analyze</Button>
                   ) : (
-                    <Button variant="info" size="lg" className="mt-3" onClick={this.handleDisabledClick}>Analyze</Button>
+                    <Button variant="info" size="lg" className="analyze-button" onClick={this.handleDisabledClick}>Analyze</Button>
                   )
                 )}
                 {this.state.showMessage && (this.state.e_hr === "" || this.state.e_min === "") &&
@@ -313,37 +321,84 @@ class Classifier extends Component {
                 }
                 {this.state.recentImage &&
                   <React.Fragment>
-                    {this.state.recentImage.data.analyzed.includes('Failed') && 
-                        <Alert variant='warning' style={{ marginTop: '12px'}}>
-                            <div className="auto-line-break analyzed-results">{this.state.recentImage.data.analyzed}</div>
-                        </Alert>
-                    }
-                    {!this.state.recentImage.data.analyzed.includes('Failed') && Number(this.state.recentImage.data.analyzed) <= 100 ? (
-                        <Alert variant='primary' style={{ marginTop: '12px'}}>
-                            <div className="auto-line-break analyzed-results">Ozone exposure level<br></br><b>{Math.round(this.state.recentImage.data.analyzed)}</b> ppb</div>
-                        </Alert>
-                    ) : !this.state.recentImage.data.analyzed.includes('Failed') && (
-                        <Alert variant='danger' style={{ marginTop: '12px'}}>
-                            <div className="auto-line-break analyzed-results">Ozone exposure level<br></br> <b>{Math.round(this.state.recentImage.data.analyzed)}</b> ppb</div>
-                        </Alert>
-                    )}
                     {!this.state.recentImage.data.analyzed.includes('Failed') && 
+                      <div className="circular-progress-container">
                         <div className="circular-progress-bar" style={{marginTop: '13px !important'}}>
                           <CircularProgressbar
                             value={Number(this.state.recentImage.data.analyzed)}
                             text={
-                              Number(this.state.recentImage.data.analyzed) <= 100 ? 'SAFE' : 'DANGER'
+                              Number(this.state.recentImage.data.analyzed) < 100.0 ? 'SAFE' : 'DANGER'
                             }
                             styles={buildStyles({
                               fontSize: '14px',
-                              textColor: Number(this.state.recentImage.data.analyzed) <= 100 ? '#007bff' : '#dc3545',
-                              pathColor: Number(this.state.recentImage.data.analyzed) <= 100 ? '#007bff' : '#dc3545',
+                              textColor: Number(this.state.recentImage.data.analyzed) < 100.0 ? '#007bff' : '#dc3545',
+                              pathColor: Number(this.state.recentImage.data.analyzed) < 100.0 ? '#007bff' : '#dc3545',
                               trailColor: '#f2f2f2',
                             })}
                           >
                           </CircularProgressbar>
                         </div>
+                      </div>
                     }
+                    {this.state.recentImage.data.analyzed.includes('Failed') && 
+                        <Alert variant='warning' style={{ marginTop: '50px'}}>
+                            <div className="auto-line-break analyzed-results">{this.state.recentImage.data.analyzed}</div>
+                        </Alert>
+                    }
+                    {!this.state.recentImage.data.analyzed.includes('Failed') && Number(this.state.recentImage.data.analyzed) < 100.0 ? (
+                        <Alert variant='primary' className="custom-alert" style={{ marginTop: '40px'}}>
+                            <div className="auto-line-break analyzed-results">Ozone exposure level<br></br><b>{Math.round(this.state.recentImage.data.analyzed)}</b> ppb</div>
+                        </Alert>
+                    ) : !this.state.recentImage.data.analyzed.includes('Failed') && (
+                        <Alert variant='danger' className="custom-alert" style={{ marginTop: '40px'}}>
+                            <div className="auto-line-break analyzed-results">Ozone exposure level<br></br> <b>{Math.round(this.state.recentImage.data.analyzed)}</b> ppb</div>
+                        </Alert>
+                    )}
+                     <div className="image-container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '20px' }}>
+                     {this.state.recentImage && (
+                        <React.Fragment>
+                          {this.state.showAQI ? (
+                            <React.Fragment>                      
+                              <Button style={{ marginTop: '0px', marginBottom: '50px', fontSize: '15px', width: '150px', height: '40px' }} variant="primary" size="lg" className="mt-3 mx-auto" onClick={this.hideAQI}>AQI</Button>
+                              <div style={{border: '0px solid #ccc', borderRadius: '4px',padding: '3px',marginTop: '0px', marginBottom: '10px'}}>
+                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center',marginTop: '0px', marginBottom: '0px'}}>
+                                <GaugeChart
+                                  id="gauge-chart4"
+                                  style={{ width: '600px', height: '400px' }}
+                                  nrOfLevels={6}
+                                  arcPadding={0.01}
+                                  cornerRadius={2}
+                                  percent={this.state.recentImage.data.analyzed / 500}
+                                  needleColor="#345243"
+                                  colors={["#00FF00", "#FFFF00", "#FFA500", "#FF0000", "#800080", "#800000"]}
+                                  colorRanges={[
+                                    { from: 0, to: 50, color: '#00FF00', label: 'Good', description: 'Air quality is considered satisfactory, and air pollution poses little or no risk.' },
+                                    { from: 50, to: 100, color: '#FFFF00', label: 'Moderate', description: 'Air quality is acceptable; however, for some pollutants, there may be a moderate health concern for a very small number of people.' },
+                                    { from: 100, to: 150, color: '#FFA500', label: 'Unhealthy for Sensitive Groups', description: 'Members of sensitive groups may experience health effects. The general public is less likely to be affected.' },
+                                    { from: 150, to: 200, color: '#FF0000', label: 'Unhealthy', description: 'Some members of the general public may experience health effects; members of sensitive groups may experience more serious health effects.' },
+                                    { from: 200, to: 300, color: '#800080', label: 'Very Unhealthy', description: 'Health alert: The risk of health effects is increased for everyone.' },
+                                    { from: 300, to: 500, color: '#800000', label: 'Hazardous', description: 'Health warning of emergency conditions: everyone is more likely to be affected.' }
+                                  ]}
+                                  needleBaseColor="#345243"
+                                  textColor="black"
+                                  needleSharp={true}
+                                  hideText={true}
+                                  arcWidth={0.4}
+                                  formatTextValue={value => `${value}`}
+                                  tooltipContent={(value, minValue, maxValue, label) => {
+                                    const colorRange = this.state.colorRanges.find(range => value >= range.from && value <= range.to);
+                                    return colorRange ? colorRange.label : '';
+                                  }}
+                                />
+                                </div>
+                              </div>
+                            </React.Fragment>
+                          ) : (
+                            <Button style={{ marginTop: '0px', marginBottom: '50px', fontSize: '15px', width: '150px', height: '40px' }} variant="primary" size="lg" className="mt-3 mx-auto" onClick={this.showAQI}>AQI</Button>
+                          )}
+                        </React.Fragment>
+                      )}
+                      </div> 
                   </React.Fragment>
                     }
           </React.Fragment>
@@ -353,7 +408,7 @@ class Classifier extends Component {
 
 export default Classifier;
 
-
+// Number(this.state.recentImage.data.analyzed) <- PPB * (T/8)
 // <div className="image-container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '20px' }}>
 // {this.state.recentImage && (
 //   <React.Fragment>
