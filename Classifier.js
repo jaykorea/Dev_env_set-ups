@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
 import Dropzone from 'react-dropzone';
 import './Classifier.css';
-import { Alert, Button, Image, Spinner, Form, FormControl, ProgressBar, Tooltip } from 'react-bootstrap';
+import { Alert, Button, Image, Spinner, Form, FormControl, ProgressBar } from 'react-bootstrap';
 import GaugeChart from 'react-gauge-chart';
+// import { Tooltip } from 'react-tippy';
+// import 'react-tippy/dist/tippy.css';
+import { Gauge } from 'react-gauge-ultimate'
+import 'react-gauge-ultimate/dist/index.css'
 import axios from 'axios'
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
@@ -223,7 +227,7 @@ class Classifier extends Component {
           </li>
         </div>
       ));
-    
+
       return (
     <React.Fragment>
       {this.state.recentImage === null && (
@@ -354,51 +358,28 @@ class Classifier extends Component {
                             <div className="auto-line-break analyzed-results">Ozone exposure level<br></br> <b>{Math.round(this.state.recentImage.data.analyzed)}</b> ppb</div>
                         </Alert>
                     )}
-                     <div className="image-container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '20px' }}>
                      {this.state.recentImage && (
                         <React.Fragment>
                           {this.state.showAQI ? (
                             <React.Fragment>                      
                               <Button style={{ marginTop: '0px', marginBottom: '50px', fontSize: '15px', width: '150px', height: '40px' }} variant="primary" size="lg" className="mt-3 mx-auto" onClick={this.hideAQI}>AQI</Button>
-                              <div style={{border: '0px solid #ccc', borderRadius: '4px',padding: '3px',marginTop: '0px', marginBottom: '10px'}}>
-                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center',marginTop: '0px', marginBottom: '0px'}}>
-                                <GaugeChart
-                                  id="gauge-chart4"
-                                  style={{ width: '600px', height: '400px' }}
-                                  nrOfLevels={6}
-                                  arcPadding={0.01}
-                                  cornerRadius={2}
-                                  percent={this.state.recentImage.data.analyzed / 500}
-                                  needleColor="#345243"
-                                  colors={["#00FF00", "#FFFF00", "#FFA500", "#FF0000", "#800080", "#800000"]}
-                                  colorRanges={[
-                                    { from: 0, to: 50, color: '#00FF00', label: 'Good', description: 'Air quality is considered satisfactory, and air pollution poses little or no risk.' },
-                                    { from: 50, to: 100, color: '#FFFF00', label: 'Moderate', description: 'Air quality is acceptable; however, for some pollutants, there may be a moderate health concern for a very small number of people.' },
-                                    { from: 100, to: 150, color: '#FFA500', label: 'Unhealthy for Sensitive Groups', description: 'Members of sensitive groups may experience health effects. The general public is less likely to be affected.' },
-                                    { from: 150, to: 200, color: '#FF0000', label: 'Unhealthy', description: 'Some members of the general public may experience health effects; members of sensitive groups may experience more serious health effects.' },
-                                    { from: 200, to: 300, color: '#800080', label: 'Very Unhealthy', description: 'Health alert: The risk of health effects is increased for everyone.' },
-                                    { from: 300, to: 500, color: '#800000', label: 'Hazardous', description: 'Health warning of emergency conditions: everyone is more likely to be affected.' }
-                                  ]}
-                                  needleBaseColor="#345243"
-                                  textColor="black"
-                                  needleSharp={true}
-                                  hideText={true}
-                                  arcWidth={0.4}
-                                  formatTextValue={value => `${value}`}
-                                  tooltipContent={(value, minValue, maxValue, label) => {
-                                    const colorRange = this.state.colorRanges.find(range => value >= range.from && value <= range.to);
-                                    return colorRange ? colorRange.label : '';
-                                  }}
-                                />
-                                </div>
-                              </div>
+                              <Gauge
+  segments={segments}
+  currentValue={50}
+  maxValue={500}
+  segmentCount={6}
+  hideValueText={false}
+  needleColor="#000"
+/>
+
+
                             </React.Fragment>
                           ) : (
                             <Button style={{ marginTop: '0px', marginBottom: '50px', fontSize: '15px', width: '150px', height: '40px' }} variant="primary" size="lg" className="mt-3 mx-auto" onClick={this.showAQI}>AQI</Button>
                           )}
                         </React.Fragment>
                       )}
-                      </div> 
+                      
                   </React.Fragment>
                     }
           </React.Fragment>
